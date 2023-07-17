@@ -12,7 +12,7 @@ import {
 function TemperatureAndDetails() {
   return (
     <div>
-      <div className="flex items-center justify-center py-6 text-xl text-cyan-400">
+      <div className="flex items-center justify-center py-5 text-xl text-cyan-400">
         <p>Cloudy and Rain</p>
       </div>
 
