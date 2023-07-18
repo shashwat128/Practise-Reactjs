@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { UilSearch, UilLocationPoint } from "@iconscout/react-unicons";
+import { toast } from "react-toastify";
 
 function Inputs({ setQuery, units, setUnits }) {
   const [city, setCity] = useState("");
@@ -10,7 +11,9 @@ function Inputs({ setQuery, units, setUnits }) {
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
+      toast.info("Fetching user location.");
       navigator.geolocation.getCurrentPosition((position) => {
+        toast.success("Location fetched.");
         let lat = position.coords.latitude;
         let lon = position.coords.longitude;
 
@@ -20,6 +23,11 @@ function Inputs({ setQuery, units, setUnits }) {
         });
       });
     }
+  };
+
+  const handleUnitChange = (e) => {
+    const selectedUnit = e.currentTarget.name;
+    if (units !== selectedUnit) setUnits(selectedUnit);
   };
 
   return (
@@ -47,6 +55,7 @@ function Inputs({ setQuery, units, setUnits }) {
         <button
           name="metric"
           className="text-xl text-white font-light transition ease-out hover:scale-125 "
+          onClick={handleUnitChange}
         >
           °C
         </button>
@@ -54,6 +63,7 @@ function Inputs({ setQuery, units, setUnits }) {
         <button
           name="imperial"
           className="text-xl text-white font-light transition ease-out hover:scale-125"
+          onClick={handleUnitChange}
         >
           °F
         </button>
