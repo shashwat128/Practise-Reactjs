@@ -8,6 +8,20 @@ function Inputs({ setQuery, units, setUnits }) {
     if (city !== "") setQuery({ q: city });
   };
 
+  const handleLocationClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+
+        setQuery({
+          lat,
+          lon,
+        });
+      });
+    }
+  };
+
   return (
     <div className="flex flex-row justify-center my-5">
       <div className="flex flex-row w-3/4 items-center space-x-4">
@@ -26,6 +40,7 @@ function Inputs({ setQuery, units, setUnits }) {
         <UilLocationPoint
           size={35}
           className="text-white cursor-pointer transition ease-out hover:scale-125"
+          onClick={handleLocationClick}
         />
       </div>
       <div className="flex flex-row w-1/4 items-center justify-center">
