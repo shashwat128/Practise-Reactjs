@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 
 const API_KEY = "1fa9ff4126d95b8db54f3897a208e91c";
-//1fa9ff4126d95b8db54f3897a208e91c
-
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
+
+// https://api.openweathermap.org/data/2.5/onecall?lat=48.8534&lon=2.3488&exclude=current,minutely,hourly,alerts&appid=1fa9ff4126d95b8db54f3897a208e91c&units=metric
 
 const getWeatherData = (infoType, searchParams) => {
   const url = new URL(BASE_URL + "/" + infoType);
@@ -44,16 +44,8 @@ const formatCurrentWeather = (data) => {
   };
 };
 
-const formatForecatWeather = (data) => {
-  if (!data || !data.timezone || !data.daily || !data.hourly) {
-    return { timezone: "", daily: [], hourly: [] };
-  }
-
+const formatForecastWeather = (data) => {
   let { timezone, daily, hourly } = data;
-  if (daily.length < 6 || hourly.length < 6) {
-    return { timezone, daily: [], hourly: [] };
-  }
-
   daily = daily.slice(1, 6).map((d) => {
     return {
       title: formatToLocalTime(d.dt, timezone, "ccc"),
@@ -65,7 +57,7 @@ const formatForecatWeather = (data) => {
   hourly = hourly.slice(1, 6).map((d) => {
     return {
       title: formatToLocalTime(d.dt, timezone, "hh:mm a"),
-      temp: d.temp.day,
+      temp: d.temp,
       icon: d.weather[0].icon,
     };
   });
@@ -86,9 +78,9 @@ const getFormattedWeatherData = async (searchParams) => {
     lon,
     exclude: "current, minutely, alerts",
     units: searchParams.units,
-  }).then(formatForecatWeather);
+  }).then(formatForecastWeather);
 
-  return { ...formattedCurrentWeather, ...formatForecatWeather };
+  return { ...formattedCurrentWeather, ...formattedForecastWeather };
 };
 
 const formatToLocalTime = (
@@ -103,3 +95,5 @@ const iconUrlFromCode = (code) =>
 export default getFormattedWeatherData;
 
 export { formatToLocalTime, iconUrlFromCode };
+
+//1fa9ff4126d95b8db54f3897a208e91c
